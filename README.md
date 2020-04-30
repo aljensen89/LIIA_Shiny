@@ -24,7 +24,7 @@ Note that the app is optimized for Google Chrome, and some features may be limit
 
 # Using the Application
 
-The overall structure of the application is evident from the screenshot above. First, a user enters his/her REDCap API token. If you don't already have an API token, log into UC Denver's REDCap, go to the LIIA Study database, and click on the API option along the lefthandside options.
+The overall structure of the application is evident from the screenshot above. First, a user enters his/her REDCap API token. If you don't already have an API token, log into UC Denver's REDCap, go to the LIIA Study database, and click on the API option along the left hand side options.
 
 ![REDCapAPI](figures/REDCap_API.png)
 
@@ -32,3 +32,6 @@ Your REDCap API token will be a long string of numbers and letters. It is essent
 
 ![REDCapToken](figures/REDCap_Token.png)
 
+Once you have entered your API token, click the "Call REDCap API" button. Wait until all errors on the right hand side are gone (~30 seconds). Then, choose the report(s) you wish to create. For all but the "demographics" option, if there are no study participants that fit the criteria, nothing will appear on the right hand side of the application.
+
+All reports can be exported as a .csv file using the "Download Table" button. Make sure to save any tables containing PHI into a secured folder.
