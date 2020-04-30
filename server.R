@@ -3,15 +3,23 @@
 
 # This is the server portion of a shiny app for the LIIA RECap database
 
-source("helpers.R") # Have the helper functions available
+list.of.packages<-c('base','tidyverse','plyr','magrittr','qwraps2','tableone',
+                    'shiny','shinyjs','shinythemes','REDCapExporter')
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages, repos='http://cran.us.r-project.org')
 
 library(shiny)
 library(shinyjs)
+library(shinythemes)
 library(tidyverse)
 library(plyr)
 library(magrittr)
 library(qwraps2)
 library(tableone)
+library(REDCapExporter)
+
+
+source("helpers.R") # Have the helper functions available
 
 shinyServer(function(input,output,session) {
   # ======= BUILDING THE DATASET FROM REDCAP ======= #
