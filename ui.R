@@ -4,7 +4,7 @@
 # This is the ui portion of a shiny app that provides reports and descriptive statistics
 # from data within the LIIA REDCap database
 
-fluidPage(theme=shinytheme("united"),
+fluidPage(theme=shinythemes::shinytheme("united"),
   titlePanel("Reports from LIIA REDCap Database"),
     
   # Sidebar - filters for the data
