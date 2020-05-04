@@ -7,12 +7,25 @@ getData<-function(redcap_api_token) {
   # Create the REDCap connection using the API Token provided
   Sys.setenv(REDCap_API_URI = "https://redcap.ucdenver.edu/api/")
   Sys.setenv(REDCap_API_TOKEN = as.character(redcap_api_token))
+
+  # Patch until REDCapExporter can be updated and pushed to CRAN.
+  h <- curl::new_handle()
+  h <- curl::handle_setform(h,
+                            token = Sys.getenv("REDCap_API_TOKEN"),
+                            content = "record",
+                            format = "csv")
+  records_raw <- curl::curl_fetch_memory(Sys.getenv("REDCap_API_URI"), handle = h)
+
+  # records_raw <- export_content("record")
+  # myData <- as.data.frame(records_raw)
+  myData <- read.csv(text = rawToChar(records_raw$content))
   
-  records_raw <- export_content("record")
-  myData <- as.data.frame(records_raw)
-  
-  metadata_raw <- export_content("metadata")
-  metadata <- as.data.frame(metadata_raw)
+  # metadata_raw <- export_content("metadata")
+  # metadata <- as.data.frame(metadata_raw)
+  h <- curl::handle_setform(h, content = "metadata")
+  metadata_raw <- curl::curl_fetch_memory(Sys.getenv("REDCap_API_URI"), handle = h)
+  metadata <- read.csv(text = rawToChar(metadata_raw$content))
+
   
   # Subsetting the data to make it more manageable
   records_keepVars<-c("study_id","demo_first_name","demo_last_name","demo_dob","demo_sex",
