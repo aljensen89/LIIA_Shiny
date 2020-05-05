@@ -53,7 +53,7 @@ shinyServer(function(input,output,session) {
       if(input$type_report=="Upcoming Appts"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","next_appt") %>%
-          filter(is.na("next_appt"))
+          na.exclude("next_appt")
       }
       
       if(input$type_report=="Patient Enrollment"){
