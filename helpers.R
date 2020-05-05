@@ -57,7 +57,7 @@ getData<-function(redcap_api_token) {
                                  !is.na(screen_myData$consent_yesno),]
   
   # Baseline event: innate immune history
-  base_keepVars<-c("study_id","immune_date")
+  base_keepVars<-c("study_id","redcap_event_name","immune_date")
   
   base_myData<-myData[base_keepVars]
   
@@ -66,6 +66,8 @@ getData<-function(redcap_api_token) {
   
   base_myData<-base_myData %>%
     drop_na(study_id,immune_date)
+  
+  base_myData<-base_myData[base_myData$redcap_event_name=="baseline_visit_arm_1",]
   
   # Combining the records, screening, and baseline datasets
   myData_merge<-merge(rec_myData,base_myData,by="study_id",all.x=TRUE)
@@ -135,6 +137,9 @@ getData<-function(redcap_api_token) {
                                                          "Study Ineligibility",
                                                          ifelse(myData_final$with_inelig_choice==3,
                                                                 "Participant Death",NA)))))
+  
+  myData_final$with_inelig_detail<-as.character(myData_final$with_inelig_detail)
+  myData_final$consent_scrnfail_det<-as.character(myData_final$consent_scrnfail_det)
   
   myData_final$comments<-ifelse(!is.na(myData_final$with_inelig_detail),myData_final$with_inelig_detail,
                                 ifelse(!is.na(myData_final$consent_scrnfail_det),myData_final$consent_scrnfail_det,NA))
