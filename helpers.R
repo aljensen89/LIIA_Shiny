@@ -57,7 +57,7 @@ getData<-function(redcap_api_token) {
                                  !is.na(screen_myData$consent_yesno),]
   
   # Baseline event: innate immune history
-  base_keepVars<-c("study_id","redcap_event_name","immune_date")
+  base_keepVars<-c("study_id","redcap_event_name","immune_date_base")
   
   base_myData<-myData[base_keepVars]
   
@@ -65,7 +65,7 @@ getData<-function(redcap_api_token) {
     mutate_all(na_if,"")
   
   base_myData<-base_myData %>%
-    drop_na(study_id,immune_date)
+    drop_na(study_id,immune_date_base)
   
   base_myData<-base_myData[base_myData$redcap_event_name=="baseline_visit_arm_1",]
   
@@ -117,7 +117,7 @@ getData<-function(redcap_api_token) {
   
   myData_final$curr_age<-round(as.numeric(difftime(Sys.Date(),myData_final$demo_dob,
                                                    units="days"))/364.25,2)
-  myData_final$time_diff<-difftime(Sys.Date(),myData_final$immune_date,units="days")
+  myData_final$time_diff<-difftime(Sys.Date(),myData_final$immune_date_base,units="days")
   myData_final$next_appt<-ifelse(myData_final$time_diff>=168 & 
                                    myData_final$time_diff<=196,"6 Month Survey",
                          ifelse(myData_final$time_diff>=350 & 
