@@ -58,14 +58,14 @@ shinyServer(function(input,output,session) {
       
       if(input$type_report=="Active Enrollment"){
         data %<>%
-          select("study_id","demo_first_name","demo_last_name") %>%
+          select("study_id","demo_first_name","demo_last_name","status") %>%
           filter(status == "Actively Enrolled")
       }
       
       if(input$type_report=="Patient Drop Out/Ineligibility"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status","comments") %>%
-          filter(status != c("Participant death","Actively Enrolled"))
+          filter(status %notin% c("Participant death","Actively Enrolled"))
       }
       
       if(input$type_report=="Patient Death"){
