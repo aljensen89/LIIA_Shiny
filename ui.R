@@ -22,7 +22,7 @@ fluidPage(theme=shinythemes::shinytheme("united"),
       hr() , 
       # Which type of report to be created
       radioButtons("type_report","Type of Report to be Created",
-                    choices=c("Upcoming Appts","Demographics","Patient Enrollment","Patient Death"),
+                    choices=c("Upcoming Appts","Demographics","Active Enrollment","Patient Drop Out/Ineligibility","Patient Death"),
                     selected="Upcoming Appts"),
       hr(),
       # Button to update the data
