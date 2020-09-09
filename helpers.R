@@ -3,6 +3,8 @@
 
 # Helper functions for the LIIA REDCap shiny app
 
+`%notin%` <- Negate(`%in%`)
+
 getData<-function(redcap_api_token) {
   # Create the REDCap connection using the API Token provided
   Sys.setenv(REDCap_API_URI = "https://redcap.ucdenver.edu/api/")
