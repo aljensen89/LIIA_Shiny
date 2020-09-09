@@ -56,10 +56,16 @@ shinyServer(function(input,output,session) {
           na.exclude("next_appt")
       }
       
-      if(input$type_report=="Patient Enrollment"){
+      if(input$type_report=="Active Enrollment"){
+        data %<>%
+          select("study_id","demo_first_name","demo_last_name") %>%
+          filter(status == "Actively Enrolled")
+      }
+      
+      if(input$type_report=="Patient Drop Out/Ineligibility"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status","comments") %>%
-          filter(status != "Participant death")
+          filter(status != c("Participant death","Actively Enrolled"))
       }
       
       if(input$type_report=="Patient Death"){
@@ -67,6 +73,7 @@ shinyServer(function(input,output,session) {
           select("study_id","demo_first_name","demo_last_name","status","death_date") %>%
           filter(status == "Participant death")
       }
+      
       if(input$type_report=="Demographics"){
         data %<>%
           filter(status=="Actively Enrolled") %>%
