@@ -93,7 +93,7 @@ shinyServer(function(input,output,session) {
         
         ## Create a TableOne object
         tabone<-CreateTableOne(vars=myVars,strata="demo_sex",data=data,factorVars=catVars)
-        tabone_frame<-print(tabone,showAllLevels=FALSE)
+        tabone_frame<-print(tabone,showAllLevels=FALSE,test=FALSE)
         row_nms<-rownames(tabone_frame)
         tabone_final<-cbind(row_nms,as.data.frame(tabone_frame))
         rownames(tabone_final)<-c()
@@ -109,7 +109,7 @@ shinyServer(function(input,output,session) {
   # Show the data in a table
   output$dataTable<-renderTable(
     {
-     LIIA_abb()
+      LIIA_abb()
     },
     include.rownames=FALSE
   )
