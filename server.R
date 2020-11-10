@@ -92,8 +92,8 @@ shinyServer(function(input,output,session) {
                    "demo_race_NatAmer","demo_race_Unkn","demo_race_NoAns")
         
         ## Create a TableOne object
-        tabone<-CreateTableOne(vars=myVars,data=data,factorVars=catVars)
-        tabone_frame<-print(tabone,showAllLevels=TRUE)
+        tabone<-CreateTableOne(vars=myVars,strata="demo_sex",data=data,factorVars=catVars)
+        tabone_frame<-print(tabone,showAllLevels=FALSE)
         row_nms<-rownames(tabone_frame)
         tabone_final<-cbind(row_nms,as.data.frame(tabone_frame))
         rownames(tabone_final)<-c()
