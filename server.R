@@ -92,13 +92,20 @@ shinyServer(function(input,output,session) {
                    "demo_race_NatAmer","demo_race_Unkn","demo_race_NoAns")
         
         ## Create a TableOne object
-        tabone<-CreateTableOne(vars=myVars,strata="demo_sex",data=data,factorVars=catVars)
-        tabone_frame<-print(tabone,showAllLevels=FALSE,test=FALSE)
-        row_nms<-rownames(tabone_frame)
-        tabone_final<-cbind(row_nms,as.data.frame(tabone_frame))
-        rownames(tabone_final)<-c()
-        names(tabone_final)[names(tabone_final)=="row_nms"]<-""
-        data<-tabone_final
+        tabone_overall<-CreateTableOne(vars=myVars,data=data,factorVars=catVars,test=FALSE)
+        tabone_overall_frame<-print(tabone_overall,showAllLevels=FALSE,test=FALSE)
+        row_nms_overall<-rownames(tabone_overall_frame)
+        tabone_overall_final<-cbind(row_nms_overall,as.data.frame(tabone_overall_frame))
+        rownames(tabone_overall_final)<-c()
+        names(tabone_overall_final)[names(tabone_overall_final)=="row_nms"]<-""
+        
+        tabone_bysex<-CreateTableOne(vars=myVars,strata="demo_sex",data=data,factorVars=catVars,test=FALSE)
+        tabone_bysex_frame<-print(tabone_bysex,showAllLevels=FALSE,test=FALSE)
+        row_nms_bysex<-rownames(tabone_bysex_frame)
+        tabone_bysex_final<-cbind(row_nms_bysex,as.data.frame(tabone_bysex_frame))
+        rownames(tabone_bysex_final)<-c()
+        names(tabone_bysex_final)[names(tabone_bysex_final)=="row_nms"]<-""
+        data<-cbind(tabone_overall_final,tabone_bysex_final[,2:3])
       }
     })
     data
