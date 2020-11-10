@@ -89,23 +89,31 @@ getData<-function(redcap_api_token) {
                           ifelse(myData_merge$demo_sex==0,"Male",
                                  ifelse(myData_merge$demo_sex==9,"Prefer not to Answer",NA)))
   
+  myData_merge$demo_sex<- factor(myData_merge$demo_sex,levels=c("Female","Male","Prefer not to Answer"))
+  
   myData_merge$demo_ethnicity<-ifelse(myData_merge$demo_ethnicity==1,"Not Hispanic or Latino/a",
                                 ifelse(myData_merge$demo_ethnicity==2,"Hispanic or Latino/a",
                                        ifelse(myData_merge$demo_ethnicity==3,"Unknown",
                                               ifelse(myData_merge$demo_ethnicity==9,"Prefer not to Answer",NA))))
   
+  myData_merge$demo_ethnicity<- factor(myData_merge$demo_ethnicity,levels=c("Not Hispanic or Latino/a","Hispanic or Latino/a",
+                                                                            "Unknown","Prefer not to Answer"))
+  
   myData_merge$demo_handedness<-ifelse(myData_merge$demo_handedness==0,"Right",
                                  ifelse(myData_merge$demo_handedness==1,"Left",
                                         ifelse(myData_merge$demo_handedness==2,"Ambidextrous",
                                                ifelse(myData_merge$demo_handedness==9,"Prefer not to Answer",NA))))
+  
+  myData_merge$demo_handedness<- factor(myData_merge$demo_handedness,levels=c("Right","Left","Anbidextrous","Prefer not to Answer"))
+  
   # Creating new race categories
-  myData_merge$demo_race_NatAmer<-as.factor(ifelse(myData_merge$demo_race___0==1,"Yes","No"))
-  myData_merge$demo_race_Asian<-as.factor(ifelse(myData_merge$demo_race___1==1,"Yes","No"))
-  myData_merge$demo_race_Black<-as.factor(ifelse(myData_merge$demo_race___2==1,"Yes","No"))
-  myData_merge$demo_race_Cauc<-as.factor(ifelse(myData_merge$demo_race___3==1,"Yes","No"))
-  myData_merge$demo_race_PacIsl<-as.factor(ifelse(myData_merge$demo_race___4==1,"Yes","No"))
-  myData_merge$demo_race_Unkn<-as.factor(ifelse(myData_merge$demo_race___5==1,"Yes","No"))
-  myData_merge$demo_race_NoAns<-as.factor(ifelse(myData_merge$demo_race___9==1,"Yes","No"))
+  myData_merge$demo_race_NatAmer<-factor(ifelse(myData_merge$demo_race___0==1,"Yes","No"),levels=c("Yes","No"))
+  myData_merge$demo_race_Asian<-factor(ifelse(myData_merge$demo_race___1==1,"Yes","No"),levels=c("Yes","No"))
+  myData_merge$demo_race_Black<-factor(ifelse(myData_merge$demo_race___2==1,"Yes","No"),levels=c("Yes","No"))
+  myData_merge$demo_race_Cauc<-factor(ifelse(myData_merge$demo_race___3==1,"Yes","No"),levels=c("Yes","No"))
+  myData_merge$demo_race_PacIsl<-factor(ifelse(myData_merge$demo_race___4==1,"Yes","No"),levels=c("Yes","No"))
+  myData_merge$demo_race_Unkn<-factor(ifelse(myData_merge$demo_race___5==1,"Yes","No"),levels=c("Yes","No"))
+  myData_merge$demo_race_NoAns<-factor(ifelse(myData_merge$demo_race___9==1,"Yes","No"),levels=c("Yes","No"))
   
   # Creating a new death date variable
   myData_merge$death_date<-as.character(as.Date(myData_merge$with_inelig_dthdte))
