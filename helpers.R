@@ -104,7 +104,8 @@ getData<-function(redcap_api_token) {
                                         ifelse(myData_merge$demo_handedness==2,"Ambidextrous",
                                                ifelse(myData_merge$demo_handedness==9,"Prefer not to Answer",NA))))
   
-  myData_merge$demo_handedness<- factor(myData_merge$demo_handedness,levels=c("Right","Left","Anbidextrous","Prefer not to Answer"))
+  myData_merge$demo_handedness<- factor(myData_merge$demo_handedness,levels=c("Right","Left","Ambidextrous",
+                                                                              "Prefer not to Answer"))
   
   # Creating new race categories
   myData_merge$demo_race_NatAmer<-factor(ifelse(myData_merge$demo_race___0==1,"Yes","No"),levels=c("Yes","No"))

@@ -110,6 +110,7 @@ shinyServer(function(input,output,session) {
                                 "","Native Hawaiian or Pacific Islander Race (%)","",
                                 "Alaska Native or American Indian Race (%)","","Unknown Race (%)","",
                                 "Prefer not to Answer Race (%)","")
+        tabone_combined<-tabone_combined[tabone_combined$`Variable Level` %notin% c("No","Prefer not to Answer"),]
         data<-tabone_combined
       }
     })
