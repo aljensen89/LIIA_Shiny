@@ -135,8 +135,8 @@ getData<-function(redcap_api_token) {
                                   myData_final$time_diff<=395, "12 Month Survey",
                                 ifelse(myData_final$time_diff>=515 & 
                                          myData_final$time_diff<=575, "18 Month Survey",
-                                       ifelse(myData_final$time_diff<=669 & 
-                                                myData_final$time_diff>=789,"2 Year Follow Up",NA))))
+                                       ifelse(myData_final$time_diff>=669 & 
+                                                myData_final$time_diff<=789,"2 Year Follow Up",NA))))
   
   myData_final$status<-ifelse(is.na(myData_final$with_inelig_choice) & myData_final$consent_scrnfail==0,
                                     "Actively Enrolled",
