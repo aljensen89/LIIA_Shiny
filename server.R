@@ -52,8 +52,8 @@ shinyServer(function(input,output,session) {
       # Filter based on radio button chosen
       if(input$type_report=="Upcoming Appts"){
         data %<>%
-          select("study_id","demo_first_name","demo_last_name","next_appt") %>%
-          na.exclude("next_appt")
+          select("study_id","demo_first_name","demo_last_name","next_appt","next_appt_date_format") %>%
+          na.exclude("next_appt") 
       }
       
       if(input$type_report=="Active Enrollment"){

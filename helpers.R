@@ -137,7 +137,13 @@ getData<-function(redcap_api_token) {
                                          myData_final$time_diff<=575, "18 Month Survey",
                                        ifelse(myData_final$time_diff>=669 & 
                                                 myData_final$time_diff<=789,"2 Year Follow Up",NA))))
-  
+  myData_final$next_appt_date<-ifelse(myData_final$next_appt=="6 Month Survey",as.Date(myData_final$immune_date_base)+180,
+                                      ifelse(myData_final$next_appt=="12 Month Survey",as.Date(myData_final$immune_date_base)+365,
+                                             ifelse(myData_final$next_appt=="18 Month Survey",as.Date(myData_final$immune_date_base)+545,
+                                                    ifelse(myData_final$next_appt=="2 Year Follow Up",as.Date(myData_final$immune_date_base)+730,NA))))
+  myData_final$next_appt_date_format<-paste0(lubridate::month(as.Date(myData_final$next_appt_date,origin="1970-01-01"),label=TRUE)," ",
+                                             lubridate::day(as.Date(myData_final$next_appt_date,origin="1970-01-01")),", ",
+                                             lubridate::year(as.Date(myData_final$next_appt_date,origin="1970-01-01")))
   myData_final$status<-ifelse(is.na(myData_final$with_inelig_choice) & myData_final$consent_scrnfail==0,
                                     "Actively Enrolled",
                                     ifelse(myData_final$consent_scrnfail==1,
