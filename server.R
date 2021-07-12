@@ -62,6 +62,19 @@ shinyServer(function(input,output,session) {
           filter(status == "Actively Enrolled")
       }
       
+      if(input$type_report=="Optional Measures"){
+        data %<>%
+          select("demo_first_name","demo_last_name","demo_phone","demo_email",
+                 "consent_audio_rp","consent_audio_me","consent_future","consent_b12_results") %>%
+          na.exclude("consent_audio_rp","consent_audio_me","consent_future","consent_b12_results") %>%
+          dplyr::rename(First_Name=demo_first_name,Last_Name=demo_last_name,
+                 Phone_Number=demo_phone,Email_Address=demo_email,
+                 Audio_Research_Purposes_Consent=consent_audio_rp,
+                 Audio_Medical_Education_Consent=consent_audio_me,
+                 Future_Study_Contact=consent_future,
+                 B12_Results_Contact=consent_b12_results)
+      }
+      
       if(input$type_report=="Patient Drop Out/Ineligibility"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status","comments") %>%

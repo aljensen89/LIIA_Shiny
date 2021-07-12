@@ -30,10 +30,10 @@ getData<-function(redcap_api_token) {
 
   
   # Subsetting the data to make it more manageable
-  records_keepVars<-c("study_id","demo_first_name","demo_last_name","demo_dob","demo_sex",
-                      "demo_race___0","demo_race___1","demo_race___2","demo_race___3",
-                      "demo_race___4","demo_race___5","demo_race___9","demo_ethnicity",
-                      "demo_handedness","demo_educ_yrs","with_inelig_choice",
+  records_keepVars<-c("study_id","demo_first_name","demo_last_name","demo_dob","demo_phone",
+                      "demo_email","demo_sex","demo_race___0","demo_race___1","demo_race___2",
+                      "demo_race___3","demo_race___4","demo_race___5","demo_race___9",
+                      "demo_ethnicity","demo_handedness","demo_educ_yrs","with_inelig_choice",
                       "with_inelig_dthdte","with_inelig_detail")
   
   # Records event: demographics and withdrawal/ineligibility
@@ -43,12 +43,13 @@ getData<-function(redcap_api_token) {
     mutate_all(na_if,"")
   
   rec_myData<-rec_myData %>% 
-    drop_na(study_id,demo_first_name,demo_last_name,demo_dob,demo_sex,
-            demo_ethnicity,demo_handedness,demo_educ_yrs)
+    drop_na(study_id,demo_first_name,demo_last_name,demo_dob,demo_phone,demo_email,
+            demo_sex,demo_ethnicity,demo_handedness,demo_educ_yrs)
   
   # Screening event: screening/consent
   screen_keepVars<-c("study_id","consent_scrnfail","consent_scrnfail_det",
-                      "consent_yesno")
+                      "consent_yesno","consent_audio_rp","consent_audio_me",
+                     "consent_future","consent_b12_results")
   
   screen_myData<-myData[screen_keepVars]
   
@@ -115,6 +116,17 @@ getData<-function(redcap_api_token) {
   myData_merge$demo_race_PacIsl<-factor(ifelse(myData_merge$demo_race___4==1,"Yes","No"),levels=c("Yes","No"))
   myData_merge$demo_race_Unkn<-factor(ifelse(myData_merge$demo_race___5==1,"Yes","No"),levels=c("Yes","No"))
   myData_merge$demo_race_NoAns<-factor(ifelse(myData_merge$demo_race___9==1,"Yes","No"),levels=c("Yes","No"))
+  
+  # Numeric to yes/no optional measures consent
+  myData_merge$consent_audio_rp<-ifelse(myData_merge$consent_audio_rp==1,"Yes",
+                                        ifelse(myData_merge$consent_audio_rp==0,"No",NA))
+  myData_merge$consent_audio_me<-ifelse(myData_merge$consent_audio_me==1,"Yes",
+                                        ifelse(myData_merge$consent_audio_me==0,"No",NA))
+  myData_merge$consent_future<-ifelse(myData_merge$consent_future==1,"Yes",
+                                        ifelse(myData_merge$consent_future==0,"No",NA))
+  myData_merge$consent_b12_results<-ifelse(myData_merge$consent_b12_results==1,"Yes",
+                                        ifelse(myData_merge$consent_b12_results==0,"No",NA))
+  
   
   # Creating a new death date variable
   myData_merge$death_date<-as.character(as.Date(myData_merge$with_inelig_dthdte))
