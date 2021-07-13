@@ -28,6 +28,40 @@ getData<-function(redcap_api_token) {
   metadata_raw <- curl::curl_fetch_memory(Sys.getenv("REDCap_API_URI"), handle = h)
   metadata <- read.csv(text = rawToChar(metadata_raw$content))
 
+  # Survey invitation log import
+  # config_options <- NULL
+  # uri<-Sys.getenv("REDCap_API_URI")
+  # token<-Sys.getenv("REDCap_API_TOKEN")
+  # 
+  # post_body_6mo <- list(
+  #   token = token,
+  #   content = 'participantList',
+  #   instrument = 'innate_immune_history_form_survey',
+  #   event = '6_month_survey_fol_arm_1',
+  #   format = 'csv')
+  # survey_6m0_raw<-REDCapR:::kernel_api(uri,post_body_6mo,config_options)
+  # survey_6m0<-as.data.frame(read.csv(text=survey_6m0_raw$raw_text,
+  #                                    stringsAsFactors=FALSE))
+  # 
+  # post_body_12mo <- list(
+  #   token = token,
+  #   content = 'participantList',
+  #   instrument = 'innate_immune_history_form_survey',
+  #   event = '12_month_survey_fo_arm_1',
+  #   format = 'csv')
+  # survey_12m0_raw<-REDCapR:::kernel_api(uri,post_body_12mo,config_options)
+  # survey_12m0<-as.data.frame(read.csv(text=survey_12m0_raw$raw_text,
+  #                               stringsAsFactors=FALSE))
+  # 
+  # post_body_18mo <- list(
+  #   token = token,
+  #   content = 'participantList',
+  #   instrument = 'innate_immune_history_form_survey',
+  #   event = '18_month_survey_fo_arm_1',
+  #   format = 'csv')
+  # survey_18m0_raw<-REDCapR:::kernel_api(uri,post_body_18mo,config_options)
+  # survey_18m0<-as.data.frame(read.csv(text=survey_18m0_raw$raw_text,
+  #                                     stringsAsFactors=FALSE))
   
   # Subsetting the data to make it more manageable
   records_keepVars<-c("study_id","demo_first_name","demo_last_name","demo_dob","demo_phone",
