@@ -94,7 +94,8 @@ getData<-function(redcap_api_token) {
                                  !is.na(screen_myData$consent_yesno),]
   
   # Baseline event: innate immune history
-  base_keepVars<-c("study_id","redcap_event_name","immune_date_base")
+  base_keepVars<-c("study_id","redcap_event_name","immune_date_base","head_visit_comp",
+                   "lp_date","consensus_date","consensus_conference_complete")
   
   base_myData<-myData[base_keepVars]
   
@@ -106,8 +107,31 @@ getData<-function(redcap_api_token) {
   
   base_myData<-base_myData[base_myData$redcap_event_name=="baseline_visit_arm_1",]
   
+  base_myData %<>% dplyr::select(-c(redcap_event_name))
+  
+  # Follow-up event: innate immune history
+  fu_keepVars<-c("study_id","redcap_event_name","immune_date_fu","head_visit_comp",
+                   "lp_date","consensus_date","consensus_conference_complete")
+  
+  fu_myData<-myData[fu_keepVars]
+  
+  fu_myData<-fu_myData %>% 
+    mutate_all(na_if,"")
+  
+  fu_myData<-fu_myData %>%
+    drop_na(study_id,immune_date_fu)
+  
+  fu_myData<-fu_myData[fu_myData$redcap_event_name=="2_year_follow_up_v_arm_1",]
+  
+  fu_myData %<>% dplyr::rename(head_visit_comp_fu=head_visit_comp,lp_date_fu=lp_date,
+                        consensus_date_fu=consensus_date,
+                        consensus_conference_complete_fu=consensus_conference_complete)
+  
+  fu_myData %<>% dplyr::select(-c(redcap_event_name))
+  
   # Combining the records, screening, and baseline datasets
   myData_merge<-merge(rec_myData,base_myData,by="study_id",all.x=TRUE)
+  myData_merge<-merge(myData_merge,fu_myData,by="study_id",all.x=TRUE)
   myData_merge<-merge(myData_merge,screen_myData,by="study_id",all.x=TRUE)
   
   # Character to numeric
