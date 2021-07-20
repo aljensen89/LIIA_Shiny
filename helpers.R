@@ -196,6 +196,7 @@ getData<-function(redcap_api_token) {
                                              "demo_race___9","with_inelig_dthdte") 
   myData_final<-myData_merge[!drop_rcdth_vars]
   
+  # Date work
   myData_final$curr_age<-round(as.numeric(difftime(Sys.Date(),myData_final$demo_dob,
                                                    units="days"))/364.25,2)
   myData_final$time_diff<-difftime(Sys.Date(),myData_final$immune_date_base,units="days")
@@ -230,6 +231,10 @@ getData<-function(redcap_api_token) {
   
   myData_final$comments<-ifelse(!is.na(myData_final$with_inelig_detail),myData_final$with_inelig_detail,
                                 ifelse(!is.na(myData_final$consent_scrnfail_det),myData_final$consent_scrnfail_det,NA))
+  
+  # Who is due for consensus conference?
+  myData_final$cons_conf_due <- ifelse(myData_final$head_visit_comp==1 & myData_final$consensus_conference_complete==0,"Baseline",
+                                       ifelse(myData_final$head_visit_comp_fu==1 & myData_final$consensus_conference_complete_fu==0,"Follow-up",NA))
   
   # Final dataset
   myData_final

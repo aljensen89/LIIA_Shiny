@@ -62,6 +62,12 @@ shinyServer(function(input,output,session) {
           filter(status == "Actively Enrolled")
       }
       
+      if(input$type_report=="Consensus Conference"){
+        data %<>%
+          select("study_id","demo_first_name","demo_last_name","cons_conf_due") %>%
+          na.exclude("cons_conf_due")
+      }
+      
       if(input$type_report=="Optional Measures"){
         data %<>%
           select("demo_first_name","demo_last_name","demo_phone","demo_email",
