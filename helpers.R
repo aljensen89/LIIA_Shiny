@@ -236,6 +236,18 @@ getData<-function(redcap_api_token) {
   myData_final$cons_conf_due <- ifelse(myData_final$head_visit_comp==1 & myData_final$consensus_conference_complete==0,"Baseline",
                                        ifelse(myData_final$head_visit_comp_fu==1 & myData_final$consensus_conference_complete_fu==0,"Follow-up",NA))
   
+  # Classifying state of each participant in the study
+  myData_final$base_visit_comp <- ifelse(myData_final$head_visit_comp==0 | is.na(myData_final$head_visit_comp),"No",
+                                         ifelse(myData_final$head_visit_comp==1,"Yes",NA))
+  
+  myData_final$fu_visit_comp <- ifelse(myData_final$head_visit_comp_fu==0 | is.na(myData_final$head_visit_comp_fu),"No",
+                                         ifelse(myData_final$head_visit_comp_fu==1,"Yes",NA))
+  
+  myData_final$base_lp_comp <- ifelse(is.na(myData_final$lp_date),"No","Yes")
+  myData_final$fu_lp_comp <- ifelse(is.na(myData_final$lp_date_fu),"No","Yes")
+  
+  
+  
   # Final dataset
   myData_final
 }
