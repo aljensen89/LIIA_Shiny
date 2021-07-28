@@ -52,14 +52,20 @@ shinyServer(function(input,output,session) {
       # Filter based on radio button chosen
       if(input$type_report=="Upcoming Appts"){
         data %<>%
-          select("study_id","demo_first_name","demo_last_name","next_appt","next_appt_date_format") %>%
-          na.exclude("next_appt") 
+          select("study_id","demo_first_name","demo_last_name","next_appt_final","next_appt_date_format") %>%
+          na.exclude("next_appt_final") 
       }
       
       if(input$type_report=="Active Enrollment"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status") %>%
           filter(status == "Actively Enrolled")
+      }
+      
+      if(input$type_report=="Baseline and Follow-Up Status"){
+        data %<>%
+          select("study_id","demo_first_name","demo_last_name","base_class","fu_class") %>%
+          drop_na("base_class")
       }
       
       if(input$type_report=="Consensus Conference"){
@@ -84,7 +90,7 @@ shinyServer(function(input,output,session) {
       if(input$type_report=="Patient Drop Out/Ineligibility"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status","comments") %>%
-          filter(status %notin% c("Participant death","Actively Enrolled"))
+          filter(status %notin% c("Participant death","Actively Enrolled",NA))
       }
       
       if(input$type_report=="Patient Death"){

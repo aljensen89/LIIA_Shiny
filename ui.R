@@ -23,8 +23,8 @@ fluidPage(theme=shinythemes::shinytheme("united"),
       # Which type of report to be created
       radioButtons("type_report","Type of Report to be Created",
                     choices=c("Upcoming Appts","Demographics","Active Enrollment",
-                              "Consensus Conference","Optional Measures",
-                              "Patient Drop Out/Ineligibility","Patient Death"),
+                              "Baseline and Follow-Up Status","Consensus Conference",
+                              "Optional Measures","Patient Drop Out/Ineligibility","Patient Death"),
                     selected="Upcoming Appts"),
       hr(),
       # Button to update the data

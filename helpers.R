@@ -77,8 +77,7 @@ getData<-function(redcap_api_token) {
     mutate_all(na_if,"")
   
   rec_myData<-rec_myData %>% 
-    drop_na(study_id,demo_first_name,demo_last_name,demo_dob,demo_phone,demo_email,
-            demo_sex,demo_ethnicity,demo_handedness,demo_educ_yrs)
+    drop_na(study_id,demo_first_name,demo_last_name)
   
   # Screening event: screening/consent
   screen_keepVars<-c("study_id","consent_scrnfail","consent_scrnfail_det",
@@ -93,9 +92,9 @@ getData<-function(redcap_api_token) {
   screen_myData<-screen_myData[!is.na(screen_myData$consent_scrnfail) | 
                                  !is.na(screen_myData$consent_yesno),]
   
-  # Baseline event: innate immune history
-  base_keepVars<-c("study_id","redcap_event_name","immune_date_base","head_visit_comp",
-                   "lp_date","consensus_date","consensus_conference_complete")
+  # Baseline event: innate immune history, header, LP, consensus conference
+  base_keepVars<-c("study_id","redcap_event_name","immune_date_base","head_day1_date",
+                   "head_visit_comp","lp_date","consensus_date","consensus_conference_complete")
   
   base_myData<-myData[base_keepVars]
   
@@ -109,8 +108,31 @@ getData<-function(redcap_api_token) {
   
   base_myData %<>% dplyr::select(-c(redcap_event_name))
   
-  # Follow-up event: innate immune history
-  fu_keepVars<-c("study_id","redcap_event_name","immune_date_fu","head_visit_comp",
+  # Survey events: innate immune history
+  survey_keepVars<-c("study_id","redcap_event_name","innate_immune_history_form_survey_complete")
+  
+  survey_myData<-myData[survey_keepVars]
+  
+  survey_myData<-survey_myData %>% 
+    mutate_all(na_if,"")
+  
+  survey_myData<-survey_myData %>%
+    drop_na(study_id,innate_immune_history_form_survey_complete)
+  
+  survey_6mo_myData<-survey_myData[survey_myData$redcap_event_name=="6_month_survey_fol_arm_1",]
+  survey_6mo_myData %<>% dplyr::rename(survey_complete_6mon=innate_immune_history_form_survey_complete) %>%
+    dplyr::select(-c(redcap_event_name))
+  
+  survey_12mo_myData<-survey_myData[survey_myData$redcap_event_name=="12_month_survey_fo_arm_1",]
+  survey_12mo_myData %<>% dplyr::rename(survey_complete_12mon=innate_immune_history_form_survey_complete) %>%
+    dplyr::select(-c(redcap_event_name))
+  
+  survey_18mo_myData<-survey_myData[survey_myData$redcap_event_name=="18_month_survey_fo_arm_1",]
+  survey_18mo_myData %<>% dplyr::rename(survey_complete_18mon=innate_immune_history_form_survey_complete) %>%
+    dplyr::select(-c(redcap_event_name))
+  
+  # Follow-up event: innate immune history, header, LP, consensus conference
+  fu_keepVars<-c("study_id","redcap_event_name","immune_date_fu","head_day1_date","head_visit_comp",
                    "lp_date","consensus_date","consensus_conference_complete")
   
   fu_myData<-myData[fu_keepVars]
@@ -124,14 +146,16 @@ getData<-function(redcap_api_token) {
   fu_myData<-fu_myData[fu_myData$redcap_event_name=="2_year_follow_up_v_arm_1",]
   
   fu_myData %<>% dplyr::rename(head_visit_comp_fu=head_visit_comp,lp_date_fu=lp_date,
-                        consensus_date_fu=consensus_date,
-                        consensus_conference_complete_fu=consensus_conference_complete)
-  
-  fu_myData %<>% dplyr::select(-c(redcap_event_name))
+                        head_day1_date_fu=head_day1_date,consensus_date_fu=consensus_date,
+                        consensus_conference_complete_fu=consensus_conference_complete) %>%
+    dplyr::select(-c(redcap_event_name))
   
   # Combining the records, screening, and baseline datasets
   myData_merge<-merge(rec_myData,base_myData,by="study_id",all.x=TRUE)
   myData_merge<-merge(myData_merge,fu_myData,by="study_id",all.x=TRUE)
+  myData_merge<-merge(myData_merge,survey_6mo_myData,by="study_id",all.x=TRUE)
+  myData_merge<-merge(myData_merge,survey_12mo_myData,by="study_id",all.x=TRUE)
+  myData_merge<-merge(myData_merge,survey_18mo_myData,by="study_id",all.x=TRUE)
   myData_merge<-merge(myData_merge,screen_myData,by="study_id",all.x=TRUE)
   
   # Character to numeric
@@ -196,10 +220,12 @@ getData<-function(redcap_api_token) {
                                              "demo_race___9","with_inelig_dthdte") 
   myData_final<-myData_merge[!drop_rcdth_vars]
   
-  # Date work
+  # Current age and time diff work
   myData_final$curr_age<-round(as.numeric(difftime(Sys.Date(),myData_final$demo_dob,
                                                    units="days"))/364.25,2)
   myData_final$time_diff<-difftime(Sys.Date(),myData_final$immune_date_base,units="days")
+  
+  # Next appt
   myData_final$next_appt<-ifelse(myData_final$time_diff>=150 & 
                                    myData_final$time_diff<=210,"6 Month Survey",
                          ifelse(myData_final$time_diff>=335 & 
@@ -215,16 +241,20 @@ getData<-function(redcap_api_token) {
   myData_final$next_appt_date_format<-paste0(lubridate::month(as.Date(myData_final$next_appt_date,origin="1970-01-01"),label=TRUE)," ",
                                              lubridate::day(as.Date(myData_final$next_appt_date,origin="1970-01-01")),", ",
                                              lubridate::year(as.Date(myData_final$next_appt_date,origin="1970-01-01")))
+  
+  # Study status
   myData_final$status<-ifelse(is.na(myData_final$with_inelig_choice) & myData_final$consent_scrnfail==0,
                                     "Actively Enrolled",
-                                    ifelse(myData_final$consent_scrnfail==1,
-                                           "Screen Fail",
-                                           ifelse(myData_final$with_inelig_choice==1,
-                                                  "Study Withdrawal",
+                              ifelse(is.na(myData_final$consent_scrnfail) & myData_final$with_inelig_choice==1,
+                                     "Study Withdrawal",
+                                    ifelse(myData_final$consent_scrnfail==0 & myData_final$with_inelig_choice==1,
+                                           "Study Withdrawal",
+                                           ifelse(myData_final$consent_scrnfail==1,
+                                                  "Screen Fail",
                                                   ifelse(myData_final$with_inelig_choice==2,
                                                          "Study Ineligibility",
                                                          ifelse(myData_final$with_inelig_choice==3,
-                                                                "Participant Death",NA)))))
+                                                                "Participant Death",NA))))))
   
   myData_final$with_inelig_detail<-as.character(myData_final$with_inelig_detail)
   myData_final$consent_scrnfail_det<-as.character(myData_final$consent_scrnfail_det)
@@ -246,7 +276,19 @@ getData<-function(redcap_api_token) {
   myData_final$base_lp_comp <- ifelse(is.na(myData_final$lp_date),"No","Yes")
   myData_final$fu_lp_comp <- ifelse(is.na(myData_final$lp_date_fu),"No","Yes")
   
+  myData_final$base_class <- ifelse(!is.na(myData_final$head_day1_date) & myData_final$base_lp_comp=="No" & myData_final$base_visit_comp=="No","Screened, No LP",
+                                    ifelse(!is.na(myData_final$head_day1_date) & myData_final$base_lp_comp=="Yes" & myData_final$base_visit_comp=="No","Screened, LP, Not Finished",
+                                           ifelse(!is.na(myData_final$head_day1_date) & myData_final$base_lp_comp=="Yes" & myData_final$base_visit_comp=="Yes","Baseline Visit Completed",NA)))
   
+  myData_final$fu_class <- ifelse(!is.na(myData_final$head_day1_date_fu) & myData_final$fu_lp_comp=="No" & myData_final$fu_visit_comp=="No","F/U Started, No LP",
+                                  ifelse(!is.na(myData_final$head_day1_date_fu) & myData_final$fu_lp_comp=="Yes" & myData_final$fu_visit_comp=="No","F/U Started, LP, Not Finished",
+                                         ifelse(!is.na(myData_final$head_day1_date_fu) & myData_final$fu_lp_comp=="Yes" & myData_final$fu_visit_comp=="Yes","F/U Visit Completed",NA)))
+  
+  # Next appt date - exclude people already started the next appt
+  myData_final$next_appt_final <- ifelse(myData_final$next_appt=="6 Month Survey" & is.na(myData_final$survey_complete_6mon),"6 Month Survey",
+                                         ifelse(myData_final$next_appt=="12 Month Survey" & is.na(myData_final$survey_complete_12mon),"12 Month Survey",
+                                                ifelse(myData_final$next_appt=="18 Month Survey" & is.na(myData_final$survey_complete_18mon),"18 Month Survey",
+                                                       ifelse(myData_final$next_appt=="2 Year Follow Up" & is.na(myData_final$head_day1_date_fu),"2 Year Follow Up",NA))))
   
   # Final dataset
   myData_final
