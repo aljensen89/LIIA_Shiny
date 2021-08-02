@@ -62,6 +62,30 @@ shinyServer(function(input,output,session) {
           filter(status == "Actively Enrolled")
       }
       
+      if(input$type_report=="Participant Visit Stats"){
+        data %<>%
+          filter(status=="Actively Enrolled") %>%
+          select("study_id","base_class","fu_class")
+        
+        ##Creating the table for output
+        visit_table <- data.frame(matrix(data=NA,nrow=8,ncol=2))
+        colnames(visit_table) <- c("","Number Participants")
+        visit_table[,1] <- c("Baseline","Screened, No LP","Screened, LP, Not Finished","Baseline Visit Completed",
+                             "Follow-Up","F/U Started, No LP","F/U Started, LP, Not Finished","F/U Visit Completed")
+        visit_table[1,2] <- ""
+        visit_table[5,2] <- ""
+        
+        visit_table[2,2] <- as.numeric(table(data$base_class)[3])
+        visit_table[3,2] <- as.numeric(table(data$base_class)[2])
+        visit_table[4,2] <- as.numeric(table(data$base_class)[1])
+        
+        visit_table[6,2] <- as.numeric(table(data$fu_class)[2])
+        visit_table[7,2] <- as.numeric(table(data$fu_class)[1])
+        visit_table[8,2] <- as.numeric(table(data$fu_class)[3])
+        
+        data <- visit_table
+      }
+      
       if(input$type_report=="Baseline and Follow-Up Status"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","base_class","fu_class") %>%
