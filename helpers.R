@@ -280,9 +280,9 @@ getData<-function(redcap_api_token) {
                                     ifelse(!is.na(myData_final$head_day1_date) & myData_final$base_lp_comp=="Yes" & myData_final$base_visit_comp=="No","Screened, LP, Not Finished",
                                            ifelse(!is.na(myData_final$head_day1_date) & myData_final$base_lp_comp=="Yes" & myData_final$base_visit_comp=="Yes","Baseline Visit Completed",NA)))
   
-  myData_final$fu_class <- ifelse(!is.na(myData_final$head_day1_date_fu) & myData_final$fu_lp_comp=="No" & myData_final$fu_visit_comp=="No","F/U Started, No LP",
-                                  ifelse(!is.na(myData_final$head_day1_date_fu) & myData_final$fu_lp_comp=="Yes" & myData_final$fu_visit_comp=="No","F/U Started, LP, Not Finished",
-                                         ifelse(!is.na(myData_final$head_day1_date_fu) & myData_final$fu_lp_comp=="Yes" & myData_final$fu_visit_comp=="Yes","F/U Visit Completed",NA)))
+  myData_final$fu_class <- ifelse(!is.na(myData_final$head_day1_date_fu) & myData_final$fu_visit_comp=="No","F/U Started, Not Complete",
+                                  ifelse(!is.na(myData_final$head_day1_date_fu) & myData_final$fu_lp_comp=="Yes" & myData_final$fu_visit_comp=="Yes","F/U Completed w/ LP",
+                                         ifelse(!is.na(myData_final$head_day1_date_fu) & myData_final$fu_lp_comp=="No" & myData_final$fu_visit_comp=="Yes","F/U Completed w/o LP",NA)))
   
   # Next appt date - exclude people already started the next appt
   myData_final$next_appt_final <- ifelse(myData_final$next_appt=="6 Month Survey" & is.na(myData_final$survey_complete_6mon),"6 Month Survey",
