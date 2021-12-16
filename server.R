@@ -75,13 +75,13 @@ shinyServer(function(input,output,session) {
         visit_table[1,2] <- ""
         visit_table[5,2] <- ""
         
-        visit_table[2,2] <- as.numeric(table(data$base_class)[3])
-        visit_table[3,2] <- as.numeric(table(data$base_class)[2])
-        visit_table[4,2] <- as.numeric(table(data$base_class)[1])
+        visit_table[2,2] <- as.numeric(table(data$base_class)["Screened, No LP"])
+        visit_table[3,2] <- as.numeric(table(data$base_class)["Screened, LP, Not Finished"])
+        visit_table[4,2] <- as.numeric(table(data$base_class)["Baseline Visit Completed"])
         
-        visit_table[6,2] <- as.numeric(table(data$fu_class)[3])
-        visit_table[7,2] <- as.numeric(table(data$fu_class)[1])
-        visit_table[8,2] <- as.numeric(table(data$fu_class)[2])
+        visit_table[6,2] <- as.numeric(table(data$fu_class)["F/U Started, Not Complete"])
+        visit_table[7,2] <- as.numeric(table(data$fu_class)["F/U Completed w/ LP"])
+        visit_table[8,2] <- as.numeric(table(data$fu_class)["F/U Completed w/o LP"])
         
         data <- visit_table
       }

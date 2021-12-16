@@ -263,8 +263,8 @@ getData<-function(redcap_api_token) {
                                 ifelse(!is.na(myData_final$consent_scrnfail_det),myData_final$consent_scrnfail_det,NA))
   
   # Who is due for consensus conference?
-  myData_final$cons_conf_due <- ifelse(myData_final$head_visit_comp==1 & myData_final$consensus_conference_complete==0,"Baseline",
-                                       ifelse(myData_final$head_visit_comp_fu==1 & myData_final$consensus_conference_complete_fu==0,"Follow-up",NA))
+  myData_final$cons_conf_due <- ifelse(myData_final$head_visit_comp==1 & (is.na(myData_final$consensus_conference_complete) | myData_final$consensus_conference_complete==0),"Baseline",
+                                       ifelse(myData_final$head_visit_comp_fu==1 & (is.na(myData_final$consensus_conference_complete_fu) | myData_final$consensus_conference_complete_fu==0),"Follow-up",NA))
   
   # Classifying state of each participant in the study
   myData_final$base_visit_comp <- ifelse(myData_final$head_visit_comp==0 | is.na(myData_final$head_visit_comp),"No",
