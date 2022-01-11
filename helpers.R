@@ -133,7 +133,7 @@ getData<-function(redcap_api_token) {
   
   # Follow-up event: innate immune history, header, LP, consensus conference
   fu_keepVars<-c("study_id","redcap_event_name","immune_date_fu","head_day1_date","head_visit_comp",
-                   "lp_date","consensus_date","consensus_conference_complete")
+                   "lp_date","consensus_date_fu","consensus_conference_followup_complete")
   
   fu_myData<-myData[fu_keepVars]
   
@@ -146,8 +146,8 @@ getData<-function(redcap_api_token) {
   fu_myData<-fu_myData[fu_myData$redcap_event_name=="2_year_follow_up_v_arm_1",]
   
   fu_myData %<>% dplyr::rename(head_visit_comp_fu=head_visit_comp,lp_date_fu=lp_date,
-                        head_day1_date_fu=head_day1_date,consensus_date_fu=consensus_date,
-                        consensus_conference_complete_fu=consensus_conference_complete) %>%
+                        head_day1_date_fu=head_day1_date,consensus_date_fu=consensus_date_fu,
+                        consensus_conference_fu_complete=consensus_conference_followup_complete) %>%
     dplyr::select(-c(redcap_event_name))
   
   # Combining the records, screening, and baseline datasets
@@ -264,7 +264,7 @@ getData<-function(redcap_api_token) {
   
   # Who is due for consensus conference?
   myData_final$cons_conf_due <- ifelse(myData_final$head_visit_comp==1 & (is.na(myData_final$consensus_conference_complete) | myData_final$consensus_conference_complete==0),"Baseline",
-                                       ifelse(myData_final$head_visit_comp_fu==1 & (is.na(myData_final$consensus_conference_complete_fu) | myData_final$consensus_conference_complete_fu==0),"Follow-up",NA))
+                                       ifelse(myData_final$head_visit_comp_fu==1 & (is.na(myData_final$consensus_conference_fu_complete) | myData_final$consensus_conference_fu_complete==0),"Follow-up",NA))
   
   # Classifying state of each participant in the study
   myData_final$base_visit_comp <- ifelse(myData_final$head_visit_comp==0 | is.na(myData_final$head_visit_comp),"No",
