@@ -53,7 +53,9 @@ shinyServer(function(input,output,session) {
       if(input$type_report=="Upcoming Appts"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","next_appt_final","next_appt_date_format") %>%
-          na.exclude("next_appt_final") 
+          na.exclude("next_appt_final") %>%
+          arrange(factor(next_appt_final,levels=c("2 Year Follow Up","6 Month Survey","12 Month Survey","18 Month Survey")),
+                  lubridate::mdy(next_appt_date_format))
       }
       
       if(input$type_report=="Active Enrollment"){
