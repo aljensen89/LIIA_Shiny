@@ -67,7 +67,7 @@ shinyServer(function(input,output,session) {
       
       if(input$type_report=="Participant Visit Stats"){
         data %<>%
-          filter(status=="Actively Enrolled") %>%
+          filter(status=="Actively Enrolled" | status == "Completed Study") %>%
           select("study_id","base_class","fu_class")
         
         ##Creating the table for output
@@ -91,14 +91,14 @@ shinyServer(function(input,output,session) {
       
       if(input$type_report=="Baseline and Follow-Up Status"){
         data %<>%
-          filter(status=="Actively Enrolled") %>%
+          filter(status=="Actively Enrolled" | status == "Completed Study") %>%
           select("study_id","demo_first_name","demo_last_name","base_class","fu_class") %>%
           drop_na("base_class")
       }
       
       if(input$type_report=="Consensus Conference"){
         data %<>%
-          filter(status=="Actively Enrolled") %>%
+          filter(status=="Actively Enrolled" | status == "Completed Study") %>%
           select("study_id","demo_first_name","demo_last_name","cons_conf_due") %>%
           na.exclude("cons_conf_due")
       }
