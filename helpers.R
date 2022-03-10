@@ -243,18 +243,22 @@ getData<-function(redcap_api_token) {
                                              lubridate::year(as.Date(myData_final$next_appt_date,origin="1970-01-01")))
   
   # Study status
-  myData_final$status<-ifelse(is.na(myData_final$with_inelig_choice) & myData_final$consent_scrnfail==0,
+  myData_final$status_int<-ifelse(is.na(myData_final$with_inelig_choice) & myData_final$consent_scrnfail==0,
                                     "Actively Enrolled",
-                              ifelse(is.na(myData_final$consent_scrnfail) & myData_final$with_inelig_choice==1,
-                                     "Study Withdrawal",
-                                    ifelse(myData_final$consent_scrnfail==0 & myData_final$with_inelig_choice==1,
-                                           "Study Withdrawal",
-                                           ifelse(myData_final$consent_scrnfail==1,
-                                                  "Screen Fail",
-                                                  ifelse(myData_final$with_inelig_choice==2,
-                                                         "Study Ineligibility",
-                                                         ifelse(myData_final$with_inelig_choice==3,
-                                                                "Participant Death",NA))))))
+                                ifelse(is.na(myData_final$consent_scrnfail) & myData_final$with_inelig_choice==1,
+                                      "Study Withdrawal",
+                                      ifelse(myData_final$consent_scrnfail==0 & myData_final$with_inelig_choice==1,
+                                             "Study Withdrawal",
+                                            ifelse(myData_final$consent_scrnfail==1,
+                                                   "Screen Fail",
+                                                   ifelse(myData_final$with_inelig_choice==2,
+                                                           "Study Ineligibility",
+                                                          ifelse(myData_final$with_inelig_choice==3,
+                                                                  "Participant Death",NA))))))
+  
+  myData_final$complete_study <- ifelse(is.na(myData_final$head_visit_comp_fu) | myData_final$head_visit_comp_fu==0,0,1)
+  myData_final$status <- ifelse(myData_final$complete_study==1,"Completed Study",myData_final$status_int)
+  
   
   myData_final$with_inelig_detail<-as.character(myData_final$with_inelig_detail)
   myData_final$consent_scrnfail_det<-as.character(myData_final$consent_scrnfail_det)
