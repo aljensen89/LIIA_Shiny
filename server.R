@@ -67,8 +67,7 @@ shinyServer(function(input,output,session) {
       
       if(input$type_report=="Participant Visit Stats"){
         data %<>%
-          filter(status=="Actively Enrolled" | status == "Completed Study") %>%
-          select("study_id","base_class","fu_class")
+          select("study_id","status","base_class","fu_class")
         
         ##Creating the table for output
         visit_table <- data.frame(matrix(data=NA,nrow=8,ncol=2))
@@ -78,13 +77,13 @@ shinyServer(function(input,output,session) {
         visit_table[1,2] <- ""
         visit_table[5,2] <- ""
         
-        visit_table[2,2] <- as.numeric(table(data$base_class)["Screened, No LP"])
-        visit_table[3,2] <- as.numeric(table(data$base_class)["Screened, LP, Not Finished"])
+        visit_table[2,2] <- as.numeric(table(data[data$status=="Actively Enrolled" | data$status=="Completed Study",]$base_class)["Screened, No LP"])
+        visit_table[3,2] <- as.numeric(table(data[data$status=="Actively Enrolled" | data$status=="Completed Study",]$base_class)["Screened, LP, Not Finished"])
         visit_table[4,2] <- as.numeric(table(data$base_class)["Baseline Visit Completed"])
         
-        visit_table[6,2] <- as.numeric(table(data$fu_class)["F/U Started, Not Complete"])
-        visit_table[7,2] <- as.numeric(table(data$fu_class)["F/U Completed w/ LP"])
-        visit_table[8,2] <- as.numeric(table(data$fu_class)["F/U Completed w/o LP"])
+        visit_table[6,2] <- as.numeric(table(data[data$status=="Actively Enrolled" | data$status=="Completed Study",]$fu_class)["F/U Started, Not Complete"])
+        visit_table[7,2] <- as.numeric(table(data[data$status=="Actively Enrolled" | data$status=="Completed Study",]$fu_class)["F/U Completed w/ LP"])
+        visit_table[8,2] <- as.numeric(table(data[data$status=="Actively Enrolled" | data$status=="Completed Study",]$fu_class)["F/U Completed w/o LP"])
         
         data <- visit_table
       }
