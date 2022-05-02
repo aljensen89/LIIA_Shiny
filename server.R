@@ -119,7 +119,7 @@ shinyServer(function(input,output,session) {
       if(input$type_report=="Patient Drop Out/Ineligibility"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status","comments") %>%
-          filter(status %notin% c("Participant death","Actively Enrolled",NA))
+          filter(status %notin% c("Participant death","Actively Enrolled","Completed Study",NA))
       }
       
       if(input$type_report=="Patient Death"){

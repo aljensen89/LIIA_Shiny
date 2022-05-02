@@ -233,7 +233,7 @@ getData<-function(redcap_api_token) {
                                 ifelse(myData_final$time_diff>=515 & 
                                          myData_final$time_diff<=575, "18 Month Survey",
                                        ifelse(myData_final$time_diff>=669 & 
-                                                myData_final$time_diff<=789,"2 Year Follow Up",NA))))
+                                                myData_final$time_diff<=819,"2 Year Follow Up",NA))))
   myData_final$next_appt_date<-ifelse(myData_final$next_appt=="6 Month Survey",as.Date(myData_final$immune_date_base)+180,
                                       ifelse(myData_final$next_appt=="12 Month Survey",as.Date(myData_final$immune_date_base)+365,
                                              ifelse(myData_final$next_appt=="18 Month Survey",as.Date(myData_final$immune_date_base)+545,
