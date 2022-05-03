@@ -67,7 +67,7 @@ shinyServer(function(input,output,session) {
       
       if(input$type_report=="Participant Visit Stats"){
         data %<>%
-          select("study_id","status","base_class","bases_visit_comp","fu_class")
+          select("study_id","status","base_class","base_visit_comp","fu_class")
         
         ##Creating the table for output
         visit_table <- data.frame(matrix(data=NA,nrow=8,ncol=2))
@@ -87,7 +87,7 @@ shinyServer(function(input,output,session) {
         
         data <- visit_table
       }
-      s
+      
       if(input$type_report=="Baseline and Follow-Up Status"){
         data %<>%
           filter(status=="Actively Enrolled" | status == "Completed Study") %>%
