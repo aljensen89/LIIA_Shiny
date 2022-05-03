@@ -55,7 +55,7 @@ shinyServer(function(input,output,session) {
           select("study_id","demo_first_name","demo_last_name","status","next_appt_final","next_appt_date_format") %>%
           na.exclude("next_appt_final") %>%
           filter(status == "Actively Enrolled") %>%
-          arrange(factor(next_appt_final,levels=c("2 Year Follow Up","6 Month Survey","12 Month Survey","18 Month Survey")),
+          arrange(factor(next_appt_final,levels=c("Overdue 2 Year Follow Up","2 Year Follow Up","6 Month Survey","12 Month Survey","18 Month Survey")),
                   lubridate::mdy(next_appt_date_format))
       }
       
@@ -67,7 +67,7 @@ shinyServer(function(input,output,session) {
       
       if(input$type_report=="Participant Visit Stats"){
         data %<>%
-          select("study_id","status","base_class","fu_class")
+          select("study_id","status","base_class","bases_visit_comp","fu_class")
         
         ##Creating the table for output
         visit_table <- data.frame(matrix(data=NA,nrow=8,ncol=2))
@@ -79,7 +79,7 @@ shinyServer(function(input,output,session) {
         
         visit_table[2,2] <- as.numeric(table(data[data$status=="Actively Enrolled" | data$status=="Completed Study",]$base_class)["Screened, No LP"])
         visit_table[3,2] <- as.numeric(table(data[data$status=="Actively Enrolled" | data$status=="Completed Study",]$base_class)["Screened, LP, Not Finished"])
-        visit_table[4,2] <- as.numeric(table(data$base_class)["Baseline Visit Completed"])
+        visit_table[4,2] <- as.numeric(table(data$base_visit_comp)["Yes"])
         
         visit_table[6,2] <- as.numeric(table(data[data$status=="Actively Enrolled" | data$status=="Completed Study",]$fu_class)["F/U Started, Not Complete"])
         visit_table[7,2] <- as.numeric(table(data[data$status=="Actively Enrolled" | data$status=="Completed Study",]$fu_class)["F/U Completed w/ LP"])
@@ -87,7 +87,7 @@ shinyServer(function(input,output,session) {
         
         data <- visit_table
       }
-      
+      s
       if(input$type_report=="Baseline and Follow-Up Status"){
         data %<>%
           filter(status=="Actively Enrolled" | status == "Completed Study") %>%

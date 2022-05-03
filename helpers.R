@@ -233,11 +233,12 @@ getData<-function(redcap_api_token) {
                                 ifelse(myData_final$time_diff>=515 & 
                                          myData_final$time_diff<=575, "18 Month Survey",
                                        ifelse(myData_final$time_diff>=669 & 
-                                                myData_final$time_diff<=819,"2 Year Follow Up",NA))))
+                                                myData_final$time_diff<=819,"2 Year Follow Up",
+                                              ifelse(myData_final$time_diff>=820,"Overdue 2 Year Follow Up",NA)))))
   myData_final$next_appt_date<-ifelse(myData_final$next_appt=="6 Month Survey",as.Date(myData_final$immune_date_base)+180,
                                       ifelse(myData_final$next_appt=="12 Month Survey",as.Date(myData_final$immune_date_base)+365,
                                              ifelse(myData_final$next_appt=="18 Month Survey",as.Date(myData_final$immune_date_base)+545,
-                                                    ifelse(myData_final$next_appt=="2 Year Follow Up",as.Date(myData_final$immune_date_base)+730,NA))))
+                                                    ifelse(myData_final$next_appt=="2 Year Follow Up" | myData_final$next_appt=="Overdue 2 Year Follow Up",as.Date(myData_final$immune_date_base)+730,NA))))
   myData_final$next_appt_date_format<-paste0(lubridate::month(as.Date(myData_final$next_appt_date,origin="1970-01-01"),label=TRUE)," ",
                                              lubridate::day(as.Date(myData_final$next_appt_date,origin="1970-01-01")),", ",
                                              lubridate::year(as.Date(myData_final$next_appt_date,origin="1970-01-01")))
@@ -292,7 +293,8 @@ getData<-function(redcap_api_token) {
   myData_final$next_appt_final <- ifelse(myData_final$next_appt=="6 Month Survey" & is.na(myData_final$survey_complete_6mon),"6 Month Survey",
                                          ifelse(myData_final$next_appt=="12 Month Survey" & is.na(myData_final$survey_complete_12mon),"12 Month Survey",
                                                 ifelse(myData_final$next_appt=="18 Month Survey" & is.na(myData_final$survey_complete_18mon),"18 Month Survey",
-                                                       ifelse(myData_final$next_appt=="2 Year Follow Up" & is.na(myData_final$head_day1_date_fu),"2 Year Follow Up",NA))))
+                                                       ifelse(myData_final$next_appt=="2 Year Follow Up" & is.na(myData_final$head_day1_date_fu),"2 Year Follow Up",
+                                                              ifelse(myData_final$next_appt=="Overdue 2 Year Follow Up" & is.na(myData_final$head_day1_date_fu),"Overdue 2 Year Follow Up",NA)))))
   
   # Final dataset
   myData_final
