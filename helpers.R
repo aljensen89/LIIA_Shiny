@@ -223,7 +223,7 @@ getData<-function(redcap_api_token) {
   # Current age and time diff work
   myData_final$curr_age<-round(as.numeric(difftime(Sys.Date(),myData_final$demo_dob,
                                                    units="days"))/364.25,2)
-  myData_final$time_diff<-difftime(Sys.Date(),myData_final$immune_date_base,units="days")
+  myData_final$time_diff<-difftime(Sys.Date(),myData_final$lp_date,units="days")
   
   # Next appt
   myData_final$next_appt<-ifelse(myData_final$time_diff>=150 & 
@@ -235,10 +235,10 @@ getData<-function(redcap_api_token) {
                                        ifelse(myData_final$time_diff>=669 & 
                                                 myData_final$time_diff<=819,"2 Year Follow Up",
                                               ifelse(myData_final$time_diff>=820,"Overdue 2 Year Follow Up",NA)))))
-  myData_final$next_appt_date<-ifelse(myData_final$next_appt=="6 Month Survey",as.Date(myData_final$immune_date_base)+180,
-                                      ifelse(myData_final$next_appt=="12 Month Survey",as.Date(myData_final$immune_date_base)+365,
-                                             ifelse(myData_final$next_appt=="18 Month Survey",as.Date(myData_final$immune_date_base)+545,
-                                                    ifelse(myData_final$next_appt=="2 Year Follow Up" | myData_final$next_appt=="Overdue 2 Year Follow Up",as.Date(myData_final$immune_date_base)+730,NA))))
+  myData_final$next_appt_date<-ifelse(myData_final$next_appt=="6 Month Survey",as.Date(myData_final$lp_date)+180,
+                                      ifelse(myData_final$next_appt=="12 Month Survey",as.Date(myData_final$lp_date)+365,
+                                             ifelse(myData_final$next_appt=="18 Month Survey",as.Date(myData_final$lp_date)+545,
+                                                    ifelse(myData_final$next_appt=="2 Year Follow Up" | myData_final$next_appt=="Overdue 2 Year Follow Up",as.Date(myData_final$lp_date)+730,NA))))
   myData_final$next_appt_date_format<-paste0(lubridate::month(as.Date(myData_final$next_appt_date,origin="1970-01-01"),label=TRUE)," ",
                                              lubridate::day(as.Date(myData_final$next_appt_date,origin="1970-01-01")),", ",
                                              lubridate::year(as.Date(myData_final$next_appt_date,origin="1970-01-01")))
