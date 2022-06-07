@@ -31,7 +31,8 @@ fluidPage(theme=shinythemes::shinytheme("united"),
       actionButton("updateBtn", "Update Data")
         
     ),
-      
+    
+    # Main panel used to display the report and give option for downloading report as a .csv file  
     mainPanel(
       downloadButton("downloadData","Download Table"),
       br(),br(),

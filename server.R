@@ -3,6 +3,7 @@
 
 # This is the server portion of a shiny app for the LIIA RECap database
 
+# Shiny app package dependencies
 list.of.packages<-c('base','tidyverse','plyr','magrittr','qwraps2','tableone',
                     'shiny','shinyjs','shinythemes','REDCapExporter')
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
@@ -50,6 +51,8 @@ shinyServer(function(input,output,session) {
     isolate({
       
       # Filter based on radio button chosen
+      # Upcoming Appts: details the study participants due for a survey (6, 12, or 18 months) or a 2yr f/u visit
+      # Also distinguishes those who are overdue for a 2yr f/u appt (> 3 months past due date)
       if(input$type_report=="Upcoming Appts"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status","next_appt_final","next_appt_date_format") %>%
@@ -59,12 +62,15 @@ shinyServer(function(input,output,session) {
                   lubridate::mdy(next_appt_date_format))
       }
       
+      # Creates a list of every study participant who is actively enrolled in the study
       if(input$type_report=="Active Enrollment"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status") %>%
           filter(status == "Actively Enrolled")
       }
       
+      # Creates a table of actively enrolled participants (or those who have completed the study) with their
+      # status within the study, whether it be at baseline or 2yr f/u
       if(input$type_report=="Participant Visit Stats"){
         data %<>%
           select("study_id","status","base_class","base_visit_comp","fu_class")
@@ -89,6 +95,8 @@ shinyServer(function(input,output,session) {
         data <- visit_table
       }
       
+      # Creates a list of the baseline and f/u status for each participant wither actively enrolled
+      # or who completed the study
       if(input$type_report=="Baseline and Follow-Up Status"){
         data %<>%
           filter(status=="Actively Enrolled" | status == "Completed Study") %>%
@@ -96,6 +104,8 @@ shinyServer(function(input,output,session) {
           drop_na("base_class")
       }
       
+      # Creates a list of study participants due for concensus conference for either their baseline
+      # or f/u visit
       if(input$type_report=="Consensus Conference"){
         data %<>%
           filter(status=="Actively Enrolled" | status == "Completed Study") %>%
@@ -103,6 +113,8 @@ shinyServer(function(input,output,session) {
           na.exclude("cons_conf_due")
       }
       
+      # Creates a list of study participants' responses to the optional measures questions within the
+      # informed consent
       if(input$type_report=="Optional Measures"){
         data %<>%
           select("demo_first_name","demo_last_name","demo_phone","demo_email",
@@ -116,18 +128,23 @@ shinyServer(function(input,output,session) {
                  B12_Results_Contact=consent_b12_results)
       }
       
+      # Creates a list of all subjects who screen failed, were ineligible, withdrew, or were withdrawn
+      # from the study, with the reason detailed
       if(input$type_report=="Patient Drop Out/Ineligibility"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status","comments") %>%
           filter(status %notin% c("Participant death","Actively Enrolled","Completed Study",NA))
       }
       
+      # Creates a list of study participants who died
       if(input$type_report=="Patient Death"){
         data %<>%
           select("study_id","demo_first_name","demo_last_name","status","death_date") %>%
           filter(status == "Participant death")
       }
       
+      # For actively enrolled participants or those who completed the study, a table 1 of study
+      # demographics
       if(input$type_report=="Demographics"){
         data %<>%
           filter(status=="Actively Enrolled"  | status == "Completed Study") %>%
@@ -181,7 +198,7 @@ shinyServer(function(input,output,session) {
     include.rownames=FALSE
   )
   
-  # Allow user to download the data, simply save as csv
+  # Allow user to download the data, simply save as .csv file
   output$downloadData<-downloadHandler(
     filename=function(){
       "LIIA_data.csv"
