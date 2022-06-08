@@ -1,0 +1,46 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2580
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid2\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{hyphen\}}{\leveltext\leveltemplateid3\'01\uc0\u8259 ;}{\levelnumbers;}\fi-360\li2160\lin2160 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 SHINY APP DEFINITIONS\
+\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0
+\f1\b0 \cf0 {\listtext	\uc0\u8226 	}Upcoming appointments are only for study participants who are actively enrolled in the study and for whom the next appointment has not been completed. The timing of each entry is based on the following logic.\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural\partightenfactor0
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}6 month survey: difference between \'93today\'94 and the date of the baseline visit lumbar puncture (LP) is between 150 and 210 days (anchored at 180 days with a +/- 30 day window on either side)\
+{\listtext	\uc0\u8259 	}12 month survey: difference between \'93today\'94 and the date of the baseline visit LP is between 335 and 395 days (anchored at 365 days with a +/- 30 day window on either side)\
+{\listtext	\uc0\u8259 	}18 month survey: difference between \'93today\'94 and the date of the baseline visit LP is between 515 and 575 days (anchored at 545 days with a +/- 30 day window on either side)\
+{\listtext	\uc0\u8259 	}2 year follow-up visit: difference between \'93today\'94 and the date of the baseline visit LP is between 669 and 819 days (anchored at 729 days with a (-60,+90) window.\
+{\listtext	\uc0\u8259 	}Overdue 2 year follow up visit: difference between \'93today\'94 and the date of the baseline visit LP is >= 820 days.\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8226 	}Study status definitions\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural\partightenfactor0
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}Active enrollment is defined as the participant having passed the consent screening and the withdrawal/ineligibility form being empty.\
+{\listtext	\uc0\u8259 	}Study completion is defined as the header for both the baseline visit and the follow-up visit showing a completed visit (via the head_visit_comp and head_visit_comp_fu variables).\
+{\listtext	\uc0\u8259 	}Study withdrawal is defined as the participant having passed the consent screening but the withdrawal/ineligibility form being activated with the \'93study withdrawal choice\'94 variable showing \'93participant withdrew.\'94\
+{\listtext	\uc0\u8259 	}Study ineligibility  is defined as the participant having passed the consent screening but the withdrawal/ineligibility form being activated with the \'93study withdrawal choice\'94 variable showing \'93participant became ineligible.\'94\
+{\listtext	\uc0\u8259 	}Screen fail is defined as the participant having not passed the consent screening (via the consent_scrnfail variable).\
+{\listtext	\uc0\u8259 	}Participant death is defined as the participant having passed the consent screening with the withdrawal/ineligibility form being activated with the \'93study withdrawal choice\'94 variable showing \'93participant death.\'94\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8226 	}Baseline and follow-up visit status definitions\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural\partightenfactor0
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}Baseline\
+\pard\tx1660\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2160\fi-2160\pardirnatural\partightenfactor0
+\ls1\ilvl2\cf0 {\listtext	\uc0\u8259 	}\'93Screened, no LP\'94 is defined as the first day of the baseline header instrument has been filled out but the LP instrument is not completed nor does the baseline header instrument indicate that the visit has been completed.\
+{\listtext	\uc0\u8259 	}\'93Screened, LP, not finished\'94  is defined as the first day of the baseline header instrument has been filled out and the LP instrument has been completed but the baseline header instrument indicates that the visit has not been completed.\
+{\listtext	\uc0\u8259 	}\'93Baseline visit complete\'94 is defined as all of the following: (1) the first day of the baseline header instrument has been filled out; (2) the LP instrument has been filled out; and (3) the baseline header instrument indicates that the visit has been completed.\
+\pard\tx940\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li1440\fi-1440\pardirnatural\partightenfactor0
+\ls1\ilvl1\cf0 {\listtext	\uc0\u8259 	}Follow-up\
+\pard\tx1660\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li2160\fi-2160\pardirnatural\partightenfactor0
+\ls1\ilvl2\cf0 {\listtext	\uc0\u8259 	}\'93F/u started, not complete\'94 is defined as the first day of the f/u header instrument has been filled out but the header instrument indicates that the visit has not been completed.\
+{\listtext	\uc0\u8259 	}\'93F/u completed w/ LP\'94 is defined as the first day of the f/u header instrument has been filled out and the header instrument indicates that the visit has been completed. Additionally, the follow-up LP instrument indicates that a LP was completed.\
+{\listtext	\uc0\u8259 	}\'93F/u completed w/o LP\'94 is defined as the first day of the f/u header instrument has been filled out and the header instrument indicates that the visit has been completed. However, the follow-up LP instrument indicates that a LP was not completed.\
+\pard\tx220\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\li720\fi-720\pardirnatural\partightenfactor0
+\ls1\ilvl0\cf0 {\listtext	\uc0\u8226 	}Study participants due for consensus conference are determined via the consensus conference instrument in REDCap. If the study participant has completed either their baseline or follow-up visit (determined using the header instrument) but the consensus conference instrument has not been completed, they are added to the list of those due for consensus conference review.\
+}
